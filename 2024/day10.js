@@ -180,3 +180,48 @@ final2 = inp => {
     return sum(finalScore.flat().filter(x => x.height === 0).map(x => x.score))
 }
 
+
+
+// Part 1 again, but better
+// probably more clean and efficient than original
+scoreMapB = (inp, height) => {
+    inp.forEach((y, yi) => {
+        y.forEach((cell, xi) => {
+            if (cell.height === height) {
+
+                const north = inp[yi - 1][xi];
+                const south = inp[yi + 1][xi];
+                const east = inp[yi][xi + 1];
+                const west = inp[yi][xi - 1];
+
+                const neighbors = [north, south, east, west];
+
+                neighbors.forEach(n => {
+                    if (n.height === cell.height + 1) {
+                        cell.score = cell.score.union(n.score);
+                    }
+                })
+            }
+
+
+        });
+    });
+
+    return inp;
+}
+
+loopScoringB = inp => {
+    let scoringMap = [...inp.map((y, yi) => y.map((x, xi) => ({ height: x, score: x === 9 ? new Set([`${xi},${yi}`]) : new Set() })))];
+
+    for (let i=8; i >= 0; i--) {
+        scoringMap = scoreMapB(scoringMap, i)
+    }
+
+    return scoringMap;
+}
+
+finalB = inp => {
+    const padded = padArray(inp);
+    const finalScore = loopScoringB(padded);
+    return sum(finalScore.flat().filter(x => x.height === 0).map(x => x.score.size))
+}
