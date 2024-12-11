@@ -68,13 +68,6 @@ final = (inp, n) => {
 
 
 // Part 2, AKA "Do it again, but more efficient"
-const chunkArray = (inp, size) => {
-    const outputs = []
-    for (let i = 0; i < inp.length / size; i++) {
-        outputs.push(inp.slice(i * size, (i + 1) * size))
-    }
-    return outputs;
-}
 
 stepN = ([inp, n]) => {
 
