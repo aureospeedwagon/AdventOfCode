@@ -82,10 +82,8 @@ stepN = ([inp, n]) => {
         return inp.length;
     }
 
-    const chunks = chunkArray(inp, 2);
-
-    const children = chunks.map(chunk => {
-        let nextInp = step(chunk);
+    const children = inp.map(chunk => {
+        let nextInp = step([chunk]);
         return stepN([nextInp, n-1]);
     });
 
