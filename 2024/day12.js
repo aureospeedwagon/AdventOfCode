@@ -118,6 +118,7 @@ final = inp => {
     ))];
 
     let current = newMap;
+    // loop a bunch of times to make sure everything propogates to neighbors, kinda cheating but whatever
     for (let i = 0; i < 150; i++) {
         console.log(i);
         current = getRegions(current);
@@ -269,6 +270,7 @@ final2 = inp => {
     ))];
 
     let current = newMap;
+    // loop a bunch of times to make sure everything propogates to neighbors, kinda cheating but whatever
     for (let i = 0; i < 150; i++) {
         console.log(i);
         current = getRegions2(current);
