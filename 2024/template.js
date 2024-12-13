@@ -16,6 +16,20 @@ padArray = inp => {
 const unparse = inp => inp.map(x => x.join(``)).join(`\n`);
 sum = inp => inp.reduce((a, c) => a + c);
 
+gcd = (a, b) => {
+    for (let temp = b; b !== 0;) {
+        b = a % b;
+        a = temp;
+        temp = b;
+    }
+    return a;
+}
+
+lcm = (a, b) => {
+    const gcdValue = gcd(a, b);
+    return (a * b) / gcdValue;
+}
+
 memoize = fn => {
     memo = new Map();
 
