@@ -189,33 +189,33 @@ parseInput2 = inp => {
 }
 
 // still too slow
-solveMachine2 = (machine) => {
-    const [[ax, ay], [bx, by], [px, py]] = machine;
+// solveMachine2 = (machine) => {
+//     const [[ax, ay], [bx, by], [px, py]] = machine;
 
-    const A = ax + ay;
-    const B = bx + by;
-    const P = px + py
-    const maxA = Math.floor(P / A);
-    console.log('---')
-    for (let a = 0; a <= maxA; a++) {
+//     const A = ax + ay;
+//     const B = bx + by;
+//     const P = px + py
+//     const maxA = Math.floor(P / A);
+//     console.log('---')
+//     for (let a = 0; a <= maxA; a++) {
 
-        const b = (P - (a * A)) / B;
-        const modb = b % 1;
+//         const b = (P - (a * A)) / B;
+//         const modb = b % 1;
 
-        if (modb === 0) {
-            console.log(a, b);
-            const potentialTokens = [a, b, a * 3 + b]
-            if (checkTokens(potentialTokens, machine)) {
-                return potentialTokens;
-            }
-        }
+//         if (modb === 0) {
+//             console.log(a, b);
+//             const potentialTokens = [a, b, a * 3 + b]
+//             if (checkTokens(potentialTokens, machine)) {
+//                 return potentialTokens;
+//             }
+//         }
 
-    }
+//     }
 
 
-    return [0, 0, 0];
+//     return [0, 0, 0];
 
-}
+// }
 
 
 // recurse? No, stack overflow
@@ -255,7 +255,7 @@ solveMachine2 = (machine) => {
 // solveMachine3 = memoize(solveMachine3);
 
 
-// still too slow
+// still very slow, like 10-15 minutes
 solveMachine4 = (machine) => {
     const [[ax, ay], [bx, by], [px, py]] = machine;
 
@@ -271,13 +271,6 @@ solveMachine4 = (machine) => {
     let yjump = false;
     let jump = false;
 
-
-
-
-
-
-
-    // if (maxA < maxB) {
 
     const JUMP_AX = bx / gcd(ax, bx)
     const JUMP_AY = by / gcd(ay, by)
@@ -344,59 +337,6 @@ solveMachine4 = (machine) => {
 
     }
 
-    // } else {
-
-    //     const JUMP_BX = ax / gcd(ax, bx)
-    //     const JUMP_BY = ay / gcd(ay, by)
-    //     const JUMP_B = A / gcd(A, B)
-    //     console.log('jumpsB', JUMP_BX, JUMP_BY, JUMP_B, JUMP_B * JUMP_BX * JUMP_BY)
-
-    //     for (let b = 0; b <= maxB; b += j) {
-
-    //         // console.log('bbb', b)
-    //         const calcA1 = (px - (b * bx)) / ax;
-    //         const modax = calcA1 % 1;
-    //         const calcA2 = (py - (b * by)) / ay;
-    //         const moday = calcA2 % 1;
-    //         const calcA = (P - (b * B)) / A;
-    //         const moda = calcA % 1;
-
-    //         // console.log('jump', b, modax, moday, moda)
-    //         if (modax === 0 && !xjump) {
-    //             console.log('jumpx', b);
-    //             j = lcm(j, JUMP_BX)
-    //             xjump = true;
-    //         } else if (moday === 0 && !yjump) {
-    //             console.log('jumpy', b);
-    //             j = lcm(j, JUMP_BY)
-    //             yjump = true;
-    //         } else if (moda === 0 && !jump) {
-    //             console.log('jumpz', b);
-    //             j = lcm(j, JUMP_B)
-    //             jump = true;
-    //         }
-
-    //         if ((b > Math.min(JUMP_BX, JUMP_BY)) && !(xjump || yjump || jump)) {
-    //             console.log('jumpfail', b)
-    //             return [0, 0, 0]
-    //         }
-
-    //         if (modax === 0
-    //             && moday === 0
-    //             && moda === 0
-    //             && calcA1 === calcA2
-    //         ) {
-    //             console.log('end', b, calcA1, calcA2, calcA);
-    //             const potentialTokens = [calcA1, b, calcA1 * 3 + b]
-    //             if (checkTokens(potentialTokens, machine)) {
-    //                 return potentialTokens;
-    //             }
-    //         }
-
-    //     }
-    // }
-
-
     return [0, 0, 0];
 
 }
@@ -412,15 +352,6 @@ final2 = inp => {
         console.log(mi)
         return solveMachine4(m)
     });
-
-    // for (let i = 0; i < machines.length; i++) {
-    //     const m = machines[i];
-    //     const t = tokens[i];
-    //     if (t[2] && !checkTokens(t, m)) {
-    //         console.log('bad', i);
-    //     }
-
-    // }
 
     console.log('tokens', tokens);
     return sum(tokens.map(x => x[2]).filter(x => x !== Infinity))
