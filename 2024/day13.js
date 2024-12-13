@@ -357,4 +357,27 @@ final2 = inp => {
     return sum(tokens.map(x => x[2]).filter(x => x !== Infinity))
 }
 
-final2(smallInput)
+// actual good solution
+
+solveMachineMathly = (machine) => {
+    const [[a, c], [b, d], [m, n]] = machine;
+
+    const x = ((b * n) - (d * m)) / ((b * c) - (a * d));
+    const y = ((c * m) - (a * n)) / ((b * c) - (a * d));
+
+    return [x, y, 3*x + y]
+}
+
+finalMathly = inp => {
+    // don't forget to change to parseInput2;
+    const machines = parseInput2(inp);
+    console.log('machines', machines);
+    const tokens = machines.map((m, mi) => {
+        return solveMachineMathly(m)
+    });
+
+    console.log('tokens', tokens);
+    return sum(tokens.filter(x => (x[0]%1 === 0 && x[1]%1 === 0 && x[2]%1 === 0)).map(x => x[2]))
+}
+
+finalMathly(smallInput)
