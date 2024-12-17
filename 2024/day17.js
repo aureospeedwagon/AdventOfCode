@@ -58,9 +58,13 @@ getComboOperand = (operand, A, B, C, pointer) => {
             return C;
         case 7:
         default:
-            //throw Error(`Huh? Bad Combo Operand "${operand}", Pointer: ${pointer}`)
+        //throw Error(`Huh? Bad Combo Operand "${operand}", Pointer: ${pointer}`)
     }
 
+}
+
+mod = (x, mod) => {
+    return (x % mod + mod) % mod;
 }
 
 
@@ -70,11 +74,12 @@ final = ([inp, A, B, C]) => {
     let registerC = C;
     const programCode = parseInput(inp);
 
-    console.log('programCode', programCode);
-    
     logging = false;
-    
-    
+
+    logging ? console.log('programCode', programCode) : 0;
+
+
+
     outputQueue = [];
     for (let pointer = 0; pointer < programCode.length; pointer) {
         const opcode = programCode[pointer];
@@ -85,7 +90,7 @@ final = ([inp, A, B, C]) => {
             case 0: // ADV - Divide A by combo operand, stores in A
                 logging ? console.log('ADV', registerA, comboOperand) : 0;
                 const numerator_ADV = registerA;
-                const denominator_ADV = Math.pow(2,comboOperand);
+                const denominator_ADV = Math.pow(2, comboOperand);
                 const divided_ADV = Math.floor(numerator_ADV / denominator_ADV);
                 registerA = divided_ADV;
                 logging ? console.log(registerA) : 0;
@@ -97,9 +102,9 @@ final = ([inp, A, B, C]) => {
                 logging ? console.log(registerB) : 0;
                 pointer += 2
                 break;
-            case 2: // BST - combo operand % 8, store in B
+            case 2: // BST - combo operand modulo 8, store in B
                 logging ? console.log('BST', registerB, comboOperand) : 0;
-                registerB = comboOperand % 8;
+                registerB = mod(comboOperand, 8);
                 logging ? console.log(registerB) : 0;
                 pointer += 2
                 break;
@@ -117,9 +122,10 @@ final = ([inp, A, B, C]) => {
                 logging ? console.log(registerB) : 0;
                 pointer += 2;
                 break;
-            case 5: // OUT - output combo operand % 8
+            case 5: // OUT - output combo operand modulo 8
                 logging ? console.log('OUT', comboOperand) : 0;
-                const output = comboOperand % 8;
+                logging ? console.log('OUT', comboOperand) : 0;
+                const output = mod(comboOperand, 8);
                 logging ? console.log(output) : 0;
                 outputQueue.push(output);
                 pointer += 2
@@ -127,7 +133,7 @@ final = ([inp, A, B, C]) => {
             case 6: // BDV - Divide A by combo operand, stores in B
                 logging ? console.log('BDV', registerA, comboOperand) : 0;
                 const numerator_BDV = registerA;
-                const denominator_BDV = Math.pow(2,comboOperand);
+                const denominator_BDV = Math.pow(2, comboOperand);
                 const divided_BDV = Math.floor(numerator_BDV / denominator_BDV);
                 registerB = divided_BDV;
                 logging ? console.log(registerB) : 0;
@@ -136,7 +142,7 @@ final = ([inp, A, B, C]) => {
             case 7:// CDV - Divide A by combo operand, stores in C
                 logging ? console.log('CDV', registerA, comboOperand) : 0;
                 const numerator_CDV = registerA;
-                const denominator_CDV = Math.pow(2,comboOperand);
+                const denominator_CDV = Math.pow(2, comboOperand);
                 const divided_CDV = Math.floor(numerator_CDV / denominator_CDV);
                 registerC = divided_CDV;
                 logging ? console.log(registerA) : 0;
@@ -150,11 +156,11 @@ final = ([inp, A, B, C]) => {
 
     }
 
-    console.log(`============`);
-    console.log('registerA',registerA);
-    console.log('registerB',registerB);
-    console.log('registerC',registerC);
-    console.log('outputQueue',outputQueue);
+    logging ? console.log(`============`) : 0;
+    logging ? console.log('registerA', registerA) : 0;
+    logging ? console.log('registerB', registerB) : 0;
+    logging ? console.log('registerC', registerC) : 0;
+    logging ? console.log('outputQueue', outputQueue) : 0;
 
     return outputQueue.join();
 }
@@ -177,9 +183,61 @@ const tests = () => {
 
 
         // for legacy testing purposes
-        final([bigInputProgram, bigA, bigB, bigC]) ==='6,1,6,4,2,4,7,3,5'
+        final([bigInputProgram, bigA, bigB, bigC]) === '6,1,6,4,2,4,7,3,5'
     ]
 
 }
 
-final([bigInputProgram, bigA, bigB, bigC])
+
+// followed the logic of the program
+
+// A gets divided by 8 and floored, 
+// Registers B and C have some math done to them, 
+// and then it jumps back to the start, where B and C get reset
+// so their final value at the end of the loop is irrelevant to next loop.
+// A is divided and floored in each loop, so in the final loop,
+// A has to be less than 7 to get floored to zero;
+// Check to see which values of A can produce the ending of the input
+// Since A gets divided and floored, previous loop's A must be between A*8 and (A*8 + 8)
+// could be multiple valid values, so check minimum-minumum to maximum-maximum
+// loop until find value for A to output input.
+
+// ALSO the % operator in javascript is dumb and i hate it because it's not actually modulo, it's remainder
+// which means that if X is negative X%n will be negative
+// -5 mod 3 => 1, but  -5 % 3 ==> -2;
+
+final2 = (inp) => {
+
+    const programCode = parseInput(inp)
+    console.log(programCode);
+
+    let currentMin = 1;
+    let currentMax = 7;
+    let mins = {};
+    for (let depth = 0; depth < programCode.length; depth++) {
+
+        mins[depth] = [];
+        // console.log('depth', depth, 'minmax', currentMin, currentMax)
+
+        for (let A = currentMin; A < currentMax; A++) {
+
+            const f = final([inp, A, 0, 0])
+
+
+            if (inp.endsWith(f)) {
+                mins[depth].push(A)
+            }
+        }
+
+        // console.log('mins', mins[depth]);
+        currentMin = Math.max(Math.min(...(mins[depth])) * 8, 1, currentMax);
+        currentMax = Math.max(...(mins[depth])) * 8 + 8;
+
+        // console.log('==========')
+    }
+
+    return Math.min(...mins[programCode.length - 1])
+
+}
+
+final2(bigInputProgram)
