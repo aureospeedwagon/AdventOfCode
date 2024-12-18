@@ -89,8 +89,8 @@ buildMap = (inp, size) => {
 
 buildNodes = marp => {
     const nodes = [];
-    console.log(marp)
-    console.log(unparse(marp))
+    // console.log(marp)
+    // console.log(unparse(marp))
     marp.forEach((row, yi) => {
         row.forEach((cell, xi) => {
 
@@ -169,7 +169,8 @@ djikstra = (nodes, start, end) => {
 
 
 final = (inp, size, bytes) => {
-    const parsed = parseRows(inp).slice(0, bytes);
+    const parsed = parseRows(inp).slice(0, bytes+1);
+    // console.log(parsed);
     const marp = buildMap(parsed, size);
     const nodes = buildNodes(marp);
     // console.log(unparse(marp))
@@ -177,5 +178,26 @@ final = (inp, size, bytes) => {
 }
 
 
+// Part 2
 
 
+final2 = (inp, size) => {
+    const parsed = parseRows(inp);
+
+
+    // counting down is faster than counting up since there are fewer nodes to djikstra
+    // probably also could have done a binary search instead
+    for (let i = parsed.length; i > 0; i--) {
+        // console.log('================')
+        console.log(i)
+        if (final(inp, size, i) !== Infinity) {
+            return parsed[i+1]
+        }
+
+    }
+}
+
+
+
+
+final2(smallInput, 6)
