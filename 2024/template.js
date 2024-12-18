@@ -30,6 +30,10 @@ lcm = (a, b) => {
     return (a * b) / gcdValue;
 }
 
+mod = (x, mod) => {
+    return (x % mod + mod) % mod;
+}
+
 memoize = fn => {
     memo = new Map();
 
