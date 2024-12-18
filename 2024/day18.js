@@ -180,6 +180,20 @@ final = (inp, size, bytes) => {
 
 // Part 2
 
+//// original solution, runs at speed of smell
+// final2x = (inp, size) => {
+//     const parsed = parseRows(inp);
+
+
+//     for (let i = 0; i < parsed.length; i++) {
+//         // console.log('================')
+//         console.log(i)
+//         if (final(inp, size, i) 0== Infinity) {
+//             return parsed[i]
+//         }
+
+//     }
+// }
 
 final2 = (inp, size) => {
     const parsed = parseRows(inp);
