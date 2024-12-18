@@ -169,7 +169,7 @@ djikstra = (nodes, start, end) => {
 
 
 final = (inp, size, bytes) => {
-    const parsed = parseRows(inp).slice(0, bytes+1);
+    const parsed = parseRows(inp).slice(0, bytes + 1);
     // console.log(parsed);
     const marp = buildMap(parsed, size);
     const nodes = buildNodes(marp);
@@ -191,13 +191,32 @@ final2 = (inp, size) => {
         // console.log('================')
         console.log(i)
         if (final(inp, size, i) !== Infinity) {
-            return parsed[i+1]
+            return parsed[i + 1]
         }
 
     }
 }
 
 
+// better solution
+final2b = (inp, size) => {
+    const parsed = parseRows(inp);
+
+    let min = 0;
+    let max = parsed.length;
+
+    while (max - min > 1) {
+        console.log (min, max)
+        let current = Math.floor((max + min) / 2);
+        if (final(inp, size, current) === Infinity) {
+            max = current;
+        } else {
+            min = current;
+        }
+    }
+    console.log (min, max)
+    return parsed[max]
+}
 
 
-final2(smallInput, 6)
+final2b(smallInput, 6)
