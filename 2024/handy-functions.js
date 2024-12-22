@@ -48,7 +48,8 @@ memoize = fn => {
     }
 };
 
-djikstra = (nodes, start, end) => {
+djikstra = (nodesOrig, start, end) => {
+    let nodes = [...nodesOrig];
     let distances = new Map();
     let visited = new Set();
 
