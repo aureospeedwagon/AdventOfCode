@@ -110,28 +110,21 @@ final2 = inp => {
 
     console.log('linkmap', linkMap)
 
-    const parties = [];
+    const computers = [...linkMap.keys()]
+    const parties = [...linkMap.keys()].map(x=>[x])
 
-    parsed.forEach(([p0, p1]) => {
-        // console.log(p0, p1)
-        let m0 = linkMap.get(p0);
-        let m1 = linkMap.get(p1);
-        // console.log(m0, m1)
-        let inter = m0.intersection(m1);
-
-        [...inter].forEach(p2 => {
-            party = [p0, p1, p2].toSorted().join();
-            parties.push(party);
+    computers.forEach(c=> {
+        parties.forEach(p => {
+            if (p.every(member => linkMap.get(c).has(member))) {
+                p.push(c);
+            }
         })
-
     })
 
-    console.log('parties', parties, [...new Set(parties.toSorted())])
+    const sortedParties = parties.map(p=>p.toSorted()).toSorted((a,b) => b.length - a.length)
+    console.log(sortedParties)
+    return sortedParties[0].join();
 
-    return [...new Set(parties.toSorted())]
-        .filter(x => x.indexOf('t') === 0 || x.indexOf(',t') > -1)
-        .length
-    // .map(x => x.split(','));
 
 }
 
