@@ -95,9 +95,30 @@ djikstra = (nodesOrig, start, end) => {
 }
 
 
-final=inp=> {
+final = inp => {
     const parsed = parseRows(inp);
     return parsed;
 }
 
 final(smallInput);
+
+
+const north = padded[yi - 1][xi];
+const northeast = padded[yi - 1][xi + 1];
+const northwest = padded[yi - 1][xi - 1];
+const south = padded[yi + 1][xi];
+const southEast = padded[yi + 1][xi + 1];
+const southWest = padded[yi + 1][xi - 1];
+const east = padded[yi][xi + 1];
+const west = padded[yi][xi - 1];
+
+const adjacent = [
+    north,
+    northeast,
+    northwest,
+    south,
+    southEast,
+    southWest,
+    east,
+    west
+];
