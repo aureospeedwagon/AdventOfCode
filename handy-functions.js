@@ -15,6 +15,8 @@ padArray = inp => {
 };
 const unparse = inp => inp.map(x => x.join(``)).join(`\n`);
 sum = inp => inp.reduce((a, c) => a + c);
+mul = inp => inp.reduce((a, c) => a * c);
+
 
 gcd = (a, b) => {
     for (let temp = b; b !== 0;) {
