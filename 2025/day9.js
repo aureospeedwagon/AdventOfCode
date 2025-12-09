@@ -509,6 +509,21 @@ parseRow = inp => {
     return inp.split(`,`).map(x => Number(x));
 };
 
+memoize = fn => {
+    memo = new Map();
+
+    return function (n) {
+
+        if (memo.has(JSON.stringify(n))) {
+            return memo.get(JSON.stringify(n));
+        }
+        result = fn(n);
+        memo.set(JSON.stringify(n), result);
+        return result;
+    }
+};
+
+
 
 findArea = (c1, c2) => {
     dx = Math.abs(c2[0] - c1[0]) + 1;
@@ -758,8 +773,15 @@ getBorder = (c1, c2) => {
 }
 
 
+sortRow = row => {
+    return row.toSorted((a, b) => a - b)
+}
+
+sortRow = memoize(sortRow);
+
 getIsGreenFill = ([cell, colorMap]) => {
-    const row = colorMap.get(cell[1]).toSorted((a, b) => a - b);
+    const mapRow = colorMap.get(cell[1]);
+    const row = sortRow(mapRow);
     const xcoord = cell[0];
 
 
@@ -794,19 +816,6 @@ getIsGreenFill = ([cell, colorMap]) => {
     return hit;
 }
 
-memoize = fn => {
-    memo = new Map();
-
-    return function (n) {
-
-        if (memo.has(JSON.stringify(n))) {
-            return memo.get(JSON.stringify(n));
-        }
-        result = fn(n);
-        memo.set(JSON.stringify(n), result);
-        return result;
-    }
-};
 
 getIsGreenFill = memoize(getIsGreenFill);
 
@@ -859,9 +868,11 @@ final2 = inp => {
         console.log(i1);
         reds.forEach((c2, i2) => {
             area = findArea(c1, c2)
-            if (area > biggest) {
-                if (validateTiles(colorMap, c1, c2)) {
-                    biggest = area;
+            if (i1 < i2) {
+                if (area > biggest) {
+                    if (validateTiles(colorMap, c1, c2)) {
+                        biggest = area;
+                    }
                 }
             }
         })
@@ -875,8 +886,9 @@ final2(bigInput)
 // 593696 is too low
 
 // 1624057680 is right
-// Set it running before I went to bed,
-// This took like an hour and a half to run.
+// Set it running before I went to bed, 
+// This took like an hour and a half to run. 
 // There's gotta be a better way to optimize this.
-// - definitely could optimize by not checking both a/b and b/a rectangles and a/a rectangles, would probably cut time in half.
 // But I'm probably not going to.
+
+// small improvements brought it down to ~51 minutes.
